@@ -1,7 +1,10 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { formatPrice } from "@/lib/format";
 
 type Property = {
   id: string;
+  slug: string;
   title: string;
   price: number;
   currency: string;
@@ -11,23 +14,13 @@ type Property = {
   images: string[] | null;
 };
 
-function formatPrice(price: number, currency: string) {
-  try {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency,
-      maximumFractionDigits: 0,
-    }).format(price);
-  } catch {
-    return `${currency} ${price.toLocaleString("en-US")}`;
-  }
-}
-
 export default async function PropertiesPage() {
   const supabase = await createClient();
   const { data: properties, error } = await supabase
     .from("properties")
-    .select("id, title, price, currency, city, bedrooms, bathrooms, images")
+    .select(
+      "id, slug, title, price, currency, city, bedrooms, bathrooms, images",
+    )
     .eq("is_published", true)
     .order("created_at", { ascending: false });
 
@@ -62,7 +55,10 @@ function PropertyCard({ property }: { property: Property }) {
   const image = property.images?.[0];
 
   return (
-    <div className="overflow-hidden rounded-xl border border-black/10 bg-background shadow-sm transition-shadow hover:shadow-md dark:border-white/10">
+    <Link
+      href={`/properties/${property.slug}`}
+      className="block overflow-hidden rounded-xl border border-black/10 bg-background shadow-sm transition-shadow hover:shadow-md dark:border-white/10"
+    >
       {image ? (
         // eslint-disable-next-line @next/next/no-img-element -- images come from arbitrary, un-configured external hosts
         <img
@@ -100,6 +96,6 @@ function PropertyCard({ property }: { property: Property }) {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

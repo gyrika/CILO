@@ -2,8 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { formatPrice } from "@/lib/format";
+import { InquiryForm } from "@/components/inquiry-form";
 
 type Property = {
+  id: string;
   title: string;
   description: string | null;
   price: number;
@@ -29,7 +31,7 @@ export default async function PropertyPage({
   const { data, error } = await supabase
     .from("properties")
     .select(
-      "title, description, price, currency, bedrooms, bathrooms, land_size, floor_area, address, city, district, images",
+      "id, title, description, price, currency, bedrooms, bathrooms, land_size, floor_area, address, city, district, images",
     )
     .eq("slug", slug)
     .eq("is_published", true)
@@ -112,6 +114,8 @@ export default async function PropertyPage({
           </p>
         </div>
       )}
+
+      <InquiryForm propertyId={property.id} />
     </div>
   );
 }

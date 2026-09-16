@@ -38,6 +38,7 @@ export function LeadEditForm({
 
   useEffect(() => {
     if (state.status === "success") {
+      router.push("/admin/leads");
       router.refresh();
     }
   }, [state, router]);
@@ -97,9 +98,6 @@ export function LeadEditForm({
 
       {state.status === "error" && (
         <p className="text-sm text-red-500">{state.message}</p>
-      )}
-      {state.status === "success" && (
-        <p className="text-sm text-green-600 dark:text-green-400">Saved.</p>
       )}
 
       <SaveButton />

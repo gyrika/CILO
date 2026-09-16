@@ -2,6 +2,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PropertyCard } from "@/components/property-card";
 
+export const dynamic = "force-dynamic";
+
 type SearchParams = {
   type?: string;
   property_type?: string;

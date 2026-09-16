@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -16,6 +17,7 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    color-scheme: dark;
   }
 }
 
@@ -23,4 +25,13 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Native <select> popups don't inherit the page background, so without the
+   root color-scheme above the browser renders them with its light-mode
+   default (white list, default-blue highlight) even on a dark page. This
+   sets option colors directly too, as a fallback for engines that honor it. */
+select option {
+  background-color: var(--background);
+  color: var(--foreground);
 }

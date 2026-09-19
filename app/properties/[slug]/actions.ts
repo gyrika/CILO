@@ -76,6 +76,11 @@ export async function submitInquiry(
   });
 
   if (error) {
+    console.error(
+      "[submitInquiry] leads insert failed:",
+      JSON.stringify(error, null, 2),
+      error,
+    );
     return {
       status: "error",
       message: "Something went wrong. Please try again.",

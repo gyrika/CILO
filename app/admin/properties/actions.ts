@@ -102,34 +102,10 @@ export async function updateProperty(
 
 export async function deleteProperty(id: string) {
   const supabase = await createClient();
-
-  const {
-    data: userData,
-  } = await supabase.auth.getUser();
-  console.log("[deleteProperty] auth.getUser() ->", userData?.user?.id ?? "NO USER");
-
-  const { data, error, count } = await supabase
-    .from("properties")
-    .delete({ count: "exact" })
-    .eq("id", id)
-    .select();
-
-  console.log("[deleteProperty] id:", id);
-  console.log("[deleteProperty] error:", error);
-  console.log("[deleteProperty] count (rows affected):", count);
-  console.log("[deleteProperty] data (deleted rows):", data);
+  const { error } = await supabase.from("properties").delete().eq("id", id);
 
   if (error) {
-    console.error("[deleteProperty] Supabase returned an error:", error.message);
     throw new Error(error.message);
-  }
-
-  if (!data || data.length === 0) {
-    console.warn(
-      "[deleteProperty] No error, but no rows were deleted. This means the DELETE matched zero rows — almost certainly an RLS policy silently blocking the delete for this user/row.",
-    );
-  } else {
-    console.log("[deleteProperty] Successfully deleted row(s):", data);
   }
 
   revalidatePath("/admin/properties");

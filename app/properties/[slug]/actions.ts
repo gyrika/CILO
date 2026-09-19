@@ -39,6 +39,11 @@ export async function submitInquiry(
   );
 
   if (rateLimitError) {
+    console.error(
+      "[submitInquiry] check_inquiry_rate_limit RPC failed:",
+      JSON.stringify(rateLimitError, null, 2),
+      rateLimitError,
+    );
     return {
       status: "error",
       message: "Something went wrong. Please try again.",

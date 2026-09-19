@@ -39,11 +39,6 @@ export async function submitInquiry(
   );
 
   if (rateLimitError) {
-    console.error(
-      "[submitInquiry] check_inquiry_rate_limit RPC failed:",
-      JSON.stringify(rateLimitError, null, 2),
-      rateLimitError,
-    );
     return {
       status: "error",
       message: "Something went wrong. Please try again.",
@@ -76,11 +71,6 @@ export async function submitInquiry(
   });
 
   if (error) {
-    console.error(
-      "[submitInquiry] leads insert failed:",
-      JSON.stringify(error, null, 2),
-      error,
-    );
     return {
       status: "error",
       message: "Something went wrong. Please try again.",

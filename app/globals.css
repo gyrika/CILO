@@ -35,3 +35,67 @@ select option {
   background-color: var(--background);
   color: var(--foreground);
 }
+
+@media (max-width: 639px) {
+  .admin-mobile-table,
+  .admin-mobile-table tbody,
+  .admin-mobile-table tr,
+  .admin-mobile-table td {
+    display: block;
+  }
+
+  .admin-mobile-table thead {
+    display: none;
+  }
+
+  .admin-mobile-table tbody {
+    width: 100%;
+  }
+
+  .admin-mobile-table tr {
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+    border-radius: 0.75rem;
+  }
+
+  .admin-mobile-table td {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.625rem 1rem;
+    text-align: right;
+    border-bottom: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+  }
+
+  .admin-mobile-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .admin-mobile-table td::before {
+    flex: 0 0 35%;
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .admin-mobile-leads td:nth-child(1)::before { content: "Name"; }
+  .admin-mobile-leads td:nth-child(2)::before { content: "Email"; }
+  .admin-mobile-leads td:nth-child(3)::before { content: "Phone"; }
+  .admin-mobile-leads td:nth-child(4)::before { content: "Property"; }
+  .admin-mobile-leads td:nth-child(5)::before { content: "Status"; }
+  .admin-mobile-leads td:nth-child(6)::before { content: "Source"; }
+  .admin-mobile-leads td:nth-child(7)::before { content: "Created"; }
+
+  .admin-mobile-properties td:nth-child(1)::before { content: "Title"; }
+  .admin-mobile-properties td:nth-child(2)::before { content: "Price"; }
+  .admin-mobile-properties td:nth-child(3)::before { content: "Status"; }
+  .admin-mobile-properties td:nth-child(4)::before { content: "City"; }
+  .admin-mobile-properties td:nth-child(5)::before { content: "Published"; }
+  .admin-mobile-properties td:nth-child(6)::before { content: "Actions"; }
+}

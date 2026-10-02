@@ -53,7 +53,7 @@ function pathFromPublicUrl(url: string) {
 }
 
 function inputClass() {
-  return "mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-foreground dark:border-white/10";
+  return "mt-1 min-h-11 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-base text-foreground dark:border-white/10 sm:text-sm";
 }
 
 function labelClass() {
@@ -73,7 +73,7 @@ function SubmitButton({
     <button
       type="submit"
       disabled={pending || blocked}
-      className="rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-50"
+      className="min-h-11 w-full rounded-lg bg-foreground px-4 py-2 text-base font-medium text-background disabled:opacity-50 sm:w-auto sm:text-sm"
     >
       {pending ? "Saving..." : label}
     </button>
@@ -384,8 +384,8 @@ export function PropertyForm({ property }: { property?: PropertyRecord }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
-        <label className="flex items-center gap-2 text-sm text-foreground">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+        <label className="flex min-h-11 items-center gap-3 text-sm text-foreground">
           <input
             type="checkbox"
             name="featured"
@@ -394,7 +394,7 @@ export function PropertyForm({ property }: { property?: PropertyRecord }) {
           Featured
         </label>
 
-        <label className="flex items-center gap-2 text-sm text-foreground">
+        <label className="flex min-h-11 items-center gap-3 text-sm text-foreground">
           <input
             type="checkbox"
             name="is_published"
@@ -420,7 +420,7 @@ export function PropertyForm({ property }: { property?: PropertyRecord }) {
                 <button
                   type="button"
                   onClick={() => handleRemoveImage(index)}
-                  className="absolute right-1 top-1 rounded-full bg-black/70 px-2 py-0.5 text-xs text-white"
+                  className="absolute right-1 top-1 min-h-8 min-w-8 rounded-full bg-black/70 px-2 py-0.5 text-sm text-white"
                 >
                   ×
                 </button>
@@ -437,7 +437,7 @@ export function PropertyForm({ property }: { property?: PropertyRecord }) {
           multiple
           disabled={uploading}
           onChange={handleFilesSelected}
-          className="mt-3 block text-sm text-foreground"
+          className="mt-3 block w-full text-sm text-foreground"
         />
         {uploading && (
           <p className="mt-1 text-sm text-foreground/60">Uploading…</p>

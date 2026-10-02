@@ -42,7 +42,7 @@ export default async function LeadDetailPage({
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
       <Link
         href="/admin/leads"
         className="text-sm text-foreground/60 hover:text-foreground"
@@ -50,7 +50,7 @@ export default async function LeadDetailPage({
         ← Back to leads
       </Link>
 
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight text-foreground">
+      <h1 className="mt-4 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
         {lead.name}
       </h1>
       <p className="mt-1 text-sm text-foreground/60">

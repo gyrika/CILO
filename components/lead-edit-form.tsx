@@ -15,7 +15,7 @@ function SaveButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-50"
+      className="min-h-11 w-full rounded-lg bg-foreground px-4 py-2 text-base font-medium text-background disabled:opacity-50 sm:w-auto sm:text-sm"
     >
       {pending ? "Saving..." : "Save changes"}
     </button>
@@ -46,7 +46,7 @@ export function LeadEditForm({
   return (
     <form
       action={formAction}
-      className="mt-4 space-y-4 rounded-xl border border-black/10 p-4 dark:border-white/10"
+      className="mt-4 space-y-4 rounded-xl border border-black/10 p-4 dark:border-white/10 sm:p-5"
     >
       <div>
         <label htmlFor="status" className="block text-sm font-medium text-foreground">
@@ -56,7 +56,7 @@ export function LeadEditForm({
           id="status"
           name="status"
           defaultValue={lead.status}
-          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-foreground dark:border-white/10"
+          className="mt-1 min-h-11 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-base text-foreground dark:border-white/10 sm:text-sm"
         >
           {LEAD_STATUSES.map((value) => (
             <option key={value} value={value}>
@@ -78,7 +78,7 @@ export function LeadEditForm({
           name="next_follow_up"
           type="date"
           defaultValue={lead.next_follow_up ?? ""}
-          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-foreground dark:border-white/10"
+          className="mt-1 min-h-11 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-base text-foreground dark:border-white/10 sm:text-sm"
         />
       </div>
 
@@ -92,7 +92,7 @@ export function LeadEditForm({
           rows={5}
           defaultValue={lead.notes ?? ""}
           placeholder="Internal notes about this lead..."
-          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-foreground dark:border-white/10"
+          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-base text-foreground dark:border-white/10 sm:text-sm"
         />
       </div>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SITE_NAME } from "@/lib/site-info";
@@ -21,13 +22,20 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-white/70 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="text-xl font-semibold tracking-tight text-foreground"
-        >
-          {SITE_NAME}
+        <Link href="/" aria-label={`${SITE_NAME} home`}>
+          {/* logo-header.png is public/logo.png cropped to its lettering so
+              it stays legible at navbar height. width/height are its real
+              pixel size (~3.4x the displayed size, so crisp on retina). */}
+          <Image
+            src="/logo-header.png"
+            alt={SITE_NAME}
+            width={353}
+            height={137}
+            priority
+            className="h-8 w-auto rounded-sm sm:h-10"
+          />
         </Link>
-        <nav className="flex gap-6 text-sm font-medium text-foreground/70">
+        <nav className="flex gap-4 text-sm font-medium text-foreground/70 sm:gap-6">
           {NAV_LINKS.map((link) => {
             const active = isActive(pathname, link.href);
 

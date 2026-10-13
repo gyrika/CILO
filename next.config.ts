@@ -10,7 +10,20 @@ const securityHeaders = [
   },
 ];
 
+const supabaseHost = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).hostname;
+
 const nextConfig: NextConfig = {
+  images: {
+    // Lets next/image resize listing photos (some originals are 3–5 MB).
+    // Limited to the public property-images bucket.
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: supabaseHost,
+        pathname: "/storage/v1/object/public/property-images/**",
+      },
+    ],
+  },
   async headers() {
     return [
       {

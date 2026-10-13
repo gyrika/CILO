@@ -53,8 +53,10 @@ function slugify(value: string) {
     .replace(/^-|-$/g, "");
 }
 
-function canonicalCity(rawCity: string) {
-  const trimmed = rawCity.trim();
+// Null for missing cities, including rows holding the literal text "NULL".
+function canonicalCity(rawCity: string | null) {
+  const trimmed = rawCity?.trim();
+  if (!trimmed || trimmed.toLowerCase() === "null") return null;
   return CITY_ALIASES[slugify(trimmed)] ?? trimmed;
 }
 
@@ -123,21 +125,46 @@ function describeGroup(
   };
 }
 
-/** All landing pages that currently have enough listings, most listings first. */
-export const getLandingPages = cache(async (): Promise<LandingPage[]> => {
+// One query per request shared by the landing pages, sitemap and homepage.
+const getPublishedSummaries = cache(async () => {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("properties")
     .select("city, listing_type, property_type, price, currency")
     .eq("is_published", true);
   if (error) throw error;
+  return (data ?? []) as ListingSummary[];
+});
+
+/** Real counts for the homepage, using the same city cleanup as the pages. */
+export async function getListingStats() {
+  const rows = await getPublishedSummaries();
+  const cityCounts = new Map<string, number>();
+  for (const row of rows) {
+    const city = canonicalCity(row.city);
+    if (city) cityCounts.set(city, (cityCounts.get(city) ?? 0) + 1);
+  }
+
+  return {
+    total: rows.length,
+    forSale: rows.filter((r) => r.listing_type === "sale").length,
+    forRent: rows.filter((r) => r.listing_type === "rent").length,
+    /** Cities with listings, most listings first. */
+    cities: [...cityCounts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([city]) => city),
+  };
+}
+
+/** All landing pages that currently have enough listings, most listings first. */
+export const getLandingPages = cache(async (): Promise<LandingPage[]> => {
+  const data = await getPublishedSummaries();
 
   const groups = new Map<string, { category: LandingCategory; city: string; variants: Set<string>; rows: ListingSummary[] }>();
 
-  for (const row of (data ?? []) as ListingSummary[]) {
-    // Some imported rows hold the literal text "NULL" instead of a real null.
-    if (!row.city?.trim() || row.city.trim().toLowerCase() === "null") continue;
+  for (const row of data) {
     const city = canonicalCity(row.city);
+    if (!city || !row.city) continue;
 
     for (const category of Object.values(LANDING_CATEGORIES)) {
       const value = category.kind === "listing_type" ? row.listing_type : row.property_type;

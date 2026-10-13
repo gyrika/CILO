@@ -9,8 +9,19 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+}
+
+/* Public-site design tokens. --color-accent is the red sampled from
+   public/logo.svg; keep it to primary buttons, links, active nav and
+   focus/underline accents, never large backgrounds. Declared in @theme so
+   Tailwind also generates bg-accent, text-accent, border-border, etc. */
+@theme {
+  --color-accent: #e8252a;
+  --color-bg: #ffffff;
+  --color-text: #111111;
+  --color-border: #e5e5e5;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,7 +35,24 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* The public site is always light and built on the tokens above. Remapping
+   --background/--foreground here lets the existing bg-background and
+   text-foreground utilities pick them up, while the admin panel (rendered
+   outside this wrapper) keeps following the OS light/dark preference. */
+.theme-public {
+  --background: var(--color-bg);
+  --foreground: var(--color-text);
+  color-scheme: light;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.theme-public :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* Native <select> popups don't inherit the page background, so without the

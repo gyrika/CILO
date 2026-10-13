@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
+import imageCompression from "browser-image-compression";
 import { createClient } from "@/lib/supabase/client";
 import {
   createProperty,
@@ -11,6 +12,22 @@ import {
 } from "@/app/admin/properties/actions";
 
 const BUCKET = "property-images";
+
+// Phone photos are often 3–5 MB; shrink them in the browser before upload
+// so listing pages stay fast. Keep in sync with scripts/compress-images.mjs.
+const COMPRESSION_OPTIONS = {
+  maxWidthOrHeight: 1920,
+  initialQuality: 0.8,
+  maxSizeMB: 1,
+  fileType: "image/jpeg",
+  useWebWorker: true,
+};
+
+async function compressImage(file: File): Promise<File> {
+  const compressed = await imageCompression(file, COMPRESSION_OPTIONS);
+  const baseName = file.name.replace(/\.[^.]+$/, "");
+  return new File([compressed], `${baseName}.jpg`, { type: "image/jpeg" });
+}
 
 type PropertyRecord = {
   id: string;
@@ -130,12 +147,20 @@ export function PropertyForm({ property }: { property?: PropertyRecord }) {
     const supabase = createClient();
     const uploaded: UploadedImage[] = [];
 
-    for (const file of Array.from(files)) {
+    for (const original of Array.from(files)) {
+      let file: File;
+      try {
+        file = await compressImage(original);
+      } catch {
+        setUploadError(`Couldn't process ${original.name} — is it an image?`);
+        continue;
+      }
+
       const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
       const path = `${crypto.randomUUID()}-${safeName}`;
       const { error } = await supabase.storage
         .from(BUCKET)
-        .upload(path, file);
+        .upload(path, file, { contentType: file.type });
 
       if (error) {
         setUploadError(error.message);
@@ -440,7 +465,9 @@ export function PropertyForm({ property }: { property?: PropertyRecord }) {
           className="mt-3 block w-full text-sm text-foreground"
         />
         {uploading && (
-          <p className="mt-1 text-sm text-foreground/60">Uploading…</p>
+          <p className="mt-1 text-sm text-foreground/60">
+            Compressing and uploading…
+          </p>
         )}
         {uploadError && (
           <p className="mt-1 text-sm text-red-500">{uploadError}</p>

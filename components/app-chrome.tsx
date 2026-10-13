@@ -14,10 +14,10 @@ export function AppChrome({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <>
+    <div className="theme-public flex flex-1 flex-col">
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />
-    </>
+    </div>
   );
 }

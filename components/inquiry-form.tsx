@@ -16,7 +16,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-50"
+      className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
     >
       {pending ? "Sending..." : "Send inquiry"}
     </button>
@@ -36,7 +36,7 @@ export function InquiryForm({ propertyId }: { propertyId: string }) {
 
   if (state.status === "success") {
     return (
-      <div className="mt-8 rounded-xl border border-black/10 p-6 dark:border-white/10">
+      <div className="mt-8 rounded-xl border border-border p-6">
         <p className="text-foreground">
           Thanks — your message has been sent. We&apos;ll be in touch soon.
         </p>
@@ -48,9 +48,9 @@ export function InquiryForm({ propertyId }: { propertyId: string }) {
     <form
       ref={formRef}
       action={formAction}
-      className="mt-8 space-y-4 rounded-xl border border-black/10 p-6 dark:border-white/10"
+      className="mt-8 space-y-4 rounded-xl border border-border p-6"
     >
-      <h2 className="text-lg font-medium text-foreground">
+      <h2 className="text-xl font-semibold tracking-tight text-foreground">
         Interested in this property?
       </h2>
 
@@ -81,7 +81,7 @@ export function InquiryForm({ propertyId }: { propertyId: string }) {
           name="name"
           type="text"
           required
-          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-foreground dark:border-white/10"
+          className="mt-1 w-full rounded-lg border border-border bg-white px-3 py-2 text-foreground"
         />
       </div>
 
@@ -96,7 +96,7 @@ export function InquiryForm({ propertyId }: { propertyId: string }) {
           id="email"
           name="email"
           type="email"
-          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-foreground dark:border-white/10"
+          className="mt-1 w-full rounded-lg border border-border bg-white px-3 py-2 text-foreground"
         />
       </div>
 
@@ -111,7 +111,7 @@ export function InquiryForm({ propertyId }: { propertyId: string }) {
           id="phone"
           name="phone"
           type="tel"
-          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-foreground dark:border-white/10"
+          className="mt-1 w-full rounded-lg border border-border bg-white px-3 py-2 text-foreground"
         />
       </div>
 
@@ -126,7 +126,7 @@ export function InquiryForm({ propertyId }: { propertyId: string }) {
           id="message"
           name="message"
           rows={4}
-          className="mt-1 w-full rounded-lg border border-black/10 bg-transparent px-3 py-2 text-foreground dark:border-white/10"
+          className="mt-1 w-full rounded-lg border border-border bg-white px-3 py-2 text-foreground"
         />
       </div>
 

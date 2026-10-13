@@ -1,16 +1,28 @@
 import Link from "next/link";
-import { formatPrice } from "@/lib/format";
+import {
+  describeProperty,
+  formatDisplayTitle,
+  formatPrice,
+} from "@/lib/format";
+import { ListingTypeBadge } from "@/components/listing-type-badge";
+import {
+  isRecentlyAdded,
+  RecentlyAddedBadge,
+} from "@/components/recently-added-badge";
 
 export type PropertyCardData = {
   id: string;
   slug: string;
   title: string;
+  property_type: string | null;
+  listing_type: string | null;
   price: number;
   currency: string;
   city: string | null;
   bedrooms: number | null;
   bathrooms: number | null;
   images: string[] | null;
+  created_at?: string | null;
 };
 
 export function PropertyCard({ property }: { property: PropertyCardData }) {
@@ -19,24 +31,31 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
   return (
     <Link
       href={`/properties/${property.slug}`}
-      className="block overflow-hidden rounded-xl border border-black/10 bg-background shadow-sm transition-shadow hover:shadow-md dark:border-white/10"
+      className="relative block overflow-hidden rounded-xl border border-border bg-white shadow-sm transition-shadow hover:shadow-md"
     >
       {image ? (
         // eslint-disable-next-line @next/next/no-img-element -- images come from arbitrary, un-configured external hosts
         <img
           src={image}
-          alt={property.title}
+          alt={`${describeProperty(property)} - photo 1`}
           className="h-48 w-full object-cover"
         />
       ) : (
-        <div className="flex h-48 w-full items-center justify-center bg-black/5 text-sm text-foreground/40 dark:bg-white/5">
+        <div className="flex h-48 w-full items-center justify-center bg-black/5 text-sm text-foreground/40">
           No image available
         </div>
       )}
+      {isRecentlyAdded(property.created_at) && (
+        <RecentlyAddedBadge className="absolute top-3 left-3" />
+      )}
+      <ListingTypeBadge
+        listingType={property.listing_type}
+        className="absolute top-3 right-3"
+      />
 
       <div className="p-4">
-        <h2 className="truncate text-lg font-medium text-foreground">
-          {property.title}
+        <h2 className="line-clamp-2 text-lg font-semibold tracking-tight text-foreground">
+          {formatDisplayTitle(property)}
         </h2>
         <p className="mt-1 text-xl font-semibold text-foreground">
           {formatPrice(property.price, property.currency)}

@@ -1,16 +1,22 @@
-import Link from "next/link";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { PropertyCard } from "@/components/property-card";
+import {
+  PropertyFilters,
+  type PropertyFilterValues,
+} from "@/components/property-filters";
+import { pageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-type SearchParams = {
-  type?: string;
-  property_type?: string;
-  city?: string;
-  min_price?: string;
-  max_price?: string;
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Properties for Sale and Rent in Sri Lanka",
+  description:
+    "Browse all Cilo listings: apartments, houses, land and commercial properties for sale and rent in Colombo, Rajagiriya and across Sri Lanka. Filter by type, city and price.",
+  path: "/properties",
+});
+
+type SearchParams = PropertyFilterValues;
 
 export default async function PropertiesPage({
   searchParams,
@@ -27,7 +33,7 @@ export default async function PropertiesPage({
   let query = supabase
     .from("properties")
     .select(
-      "id, slug, title, price, currency, city, bedrooms, bathrooms, images",
+      "id, slug, title, property_type, listing_type, price, currency, city, bedrooms, bathrooms, images, created_at",
     )
     .eq("is_published", true);
 
@@ -49,114 +55,17 @@ export default async function PropertiesPage({
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+      <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
         Properties
       </h1>
 
-      <form
-        method="get"
-        className="mt-6 flex flex-wrap items-end gap-4 rounded-xl border border-black/10 p-4 dark:border-white/10"
-      >
-        <div className="flex flex-col gap-1">
-          <label htmlFor="type" className="text-xs text-foreground/60">
-            Listing type
-          </label>
-          <select
-            id="type"
-            name="type"
-            defaultValue={type ?? ""}
-            className="rounded-md border border-black/10 bg-background px-3 py-2 text-sm dark:border-white/10"
-          >
-            <option value="">Any</option>
-            <option value="sale">For sale</option>
-            <option value="rent">For rent</option>
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label
-            htmlFor="property_type"
-            className="text-xs text-foreground/60"
-          >
-            Property type
-          </label>
-          <select
-            id="property_type"
-            name="property_type"
-            defaultValue={property_type ?? ""}
-            className="rounded-md border border-black/10 bg-background px-3 py-2 text-sm dark:border-white/10"
-          >
-            <option value="">Any</option>
-            <option value="house">House</option>
-            <option value="apartment">Apartment</option>
-            <option value="land">Land</option>
-            <option value="commercial">Commercial</option>
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="city" className="text-xs text-foreground/60">
-            City
-          </label>
-          <input
-            id="city"
-            name="city"
-            type="text"
-            defaultValue={city ?? ""}
-            placeholder="e.g. Nugegoda"
-            className="w-40 rounded-md border border-black/10 bg-background px-3 py-2 text-sm dark:border-white/10"
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="min_price" className="text-xs text-foreground/60">
-            Min price
-          </label>
-          <input
-            id="min_price"
-            name="min_price"
-            type="number"
-            min="0"
-            defaultValue={min_price ?? ""}
-            placeholder="0"
-            className="w-32 rounded-md border border-black/10 bg-background px-3 py-2 text-sm dark:border-white/10"
-          />
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label htmlFor="max_price" className="text-xs text-foreground/60">
-            Max price
-          </label>
-          <input
-            id="max_price"
-            name="max_price"
-            type="number"
-            min="0"
-            defaultValue={max_price ?? ""}
-            placeholder="Any"
-            className="w-32 rounded-md border border-black/10 bg-background px-3 py-2 text-sm dark:border-white/10"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background hover:opacity-90"
-        >
-          Apply filters
-        </button>
-
-        {hasActiveFilters && (
-          <Link
-            href="/properties"
-            className="text-sm text-foreground/60 hover:text-foreground"
-          >
-            Clear filters
-          </Link>
-        )}
-      </form>
+      <PropertyFilters
+        values={{ type, property_type, city, min_price, max_price }}
+        showClear={hasActiveFilters}
+      />
 
       {error && (
-        <p className="mt-6 text-red-600 dark:text-red-400">{error.message}</p>
+        <p className="mt-6 text-red-600">{error.message}</p>
       )}
 
       {!error && properties?.length === 0 && (

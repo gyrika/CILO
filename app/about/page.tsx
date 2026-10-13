@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { SITE_NAME } from "@/lib/site-info";
+
+export const metadata: Metadata = pageMetadata({
+  title: "About",
+  description:
+    "Cilo is a real estate agency based in Sri Lanka, helping people find houses, apartments, land and commercial properties to buy or rent.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+      <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
         About {SITE_NAME}
       </h1>
       <p className="mt-4 text-foreground/70">

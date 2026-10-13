@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { CONTACT_INFO, SITE_NAME } from "@/lib/site-info";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Contact",
+  description:
+    "Get in touch with Cilo by phone or email about buying, selling or renting property in Sri Lanka.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+      <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
         Contact {SITE_NAME}
       </h1>
       <p className="mt-4 text-foreground/70">
@@ -32,7 +41,7 @@ export default function ContactPage() {
         </div>
       </dl>
 
-      <p className="mt-8 rounded-xl border border-black/10 bg-black/5 p-4 text-sm text-foreground/60 dark:border-white/10 dark:bg-white/5">
+      <p className="mt-8 rounded-xl border border-border bg-black/5 p-4 text-sm text-foreground/60">
         A contact form will be added here soon — for now, please reach out
         using the details above.
       </p>

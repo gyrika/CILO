@@ -1,11 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Inter } from "next/font/google";
 import { AppChrome } from "@/components/app-chrome";
 import { RegisterServiceWorker } from "@/components/register-service-worker";
+import { pageMetadata } from "@/lib/seo";
+import { SITE_NAME, SITE_URL } from "@/lib/site-info";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -14,9 +16,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const defaultMetadata = pageMetadata({
+  title: `${SITE_NAME} | Real Estate in Sri Lanka`,
+  description:
+    "Cilo is a real estate agency in Sri Lanka. Browse apartments, houses, land and commercial properties for sale and rent.",
+  path: "/",
+});
+
 export const metadata: Metadata = {
-  title: "Cilo | Real Estate in Sri Lanka",
-  description: "Cilo is a real estate agency in Sri Lanka.",
+  ...defaultMetadata,
+  metadataBase: new URL(SITE_URL),
+  // Pages set a short title like "Properties"; this appends the brand.
+  title: {
+    default: `${SITE_NAME} | Real Estate in Sri Lanka`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  // Each page sets its own canonical URL; don't let them all inherit "/".
+  alternates: undefined,
   icons: {
     apple: "/icons/apple-touch-icon.png",
   },
@@ -45,7 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
+        className={`${inter.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
       >
         <RegisterServiceWorker />
         <AppChrome>{children}</AppChrome>

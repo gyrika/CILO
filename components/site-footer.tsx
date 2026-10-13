@@ -2,7 +2,7 @@ import { CONTACT_INFO, SITE_NAME } from "@/lib/site-info";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-black/10 dark:border-white/10">
+    <footer className="border-t border-border">
       <div className="mx-auto max-w-7xl px-4 py-8 text-sm text-foreground/60 sm:px-6 lg:px-8">
         <p className="font-medium text-foreground">{SITE_NAME}</p>
         <p className="mt-2">{CONTACT_INFO.phone}</p>
